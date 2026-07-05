@@ -1,0 +1,80 @@
+.review-batch-action-bar {
+  margin-bottom: 16px;
+  padding: 14px;
+
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 12px;
+
+  color: #3730a3;
+}
+
+.review-batch-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 14px;
+}
+
+.review-batch-selection-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.review-batch-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.review-batch-group {
+  padding: 12px;
+
+  background: #ffffff;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+}
+
+.review-batch-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #374151;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.review-batch-row {
+  display: flex;
+  gap: 8px;
+
+  margin-top: 8px;
+}
+
+.review-batch-row select,
+.review-batch-row input {
+  min-width: 0;
+  flex: 1;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  padding: 8px 10px;
+
+  font-size: 14px;
+}
+
+@media (max-width: 800px) {
+  .review-batch-groups {
+    grid-template-columns: 1fr;
+  }
+
+  .review-batch-summary {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

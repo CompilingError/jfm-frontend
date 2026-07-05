@@ -50,3 +50,54 @@
   gap: 16px;
   align-items: start;
 }
+
+.review-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.secondary-button {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  padding: 8px 12px;
+
+  background: #ffffff;
+  color: #374151;
+
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.secondary-button:hover {
+  background: #f3f4f6;
+}
+
+.review-selection-bar {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  color: #3730a3;
+}
+
+.review-selection-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.review-importing {
+  margin: 0 0 16px;
+  color: #3730a3;
+}
+

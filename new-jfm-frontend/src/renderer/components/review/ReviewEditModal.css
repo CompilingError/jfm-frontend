@@ -1,0 +1,191 @@
+.review-edit-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  background: rgb(15 23 42 / 42%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+}
+
+.review-edit-modal {
+  width: min(720px, 100%);
+  max-height: min(780px, 92vh);
+
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 24px 64px rgb(15 23 42 / 28%);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.review-edit-modal-header {
+  padding: 18px 20px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.review-edit-modal-header h2 {
+  margin: 0 0 6px;
+
+  color: #111827;
+  font-size: 22px;
+}
+
+.review-edit-modal-header p {
+  margin: 0;
+
+  color: #6b7280;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+.modal-close-button {
+  width: 32px;
+  height: 32px;
+
+  border: none;
+  border-radius: 999px;
+
+  background: #f3f4f6;
+  color: #374151;
+
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.modal-close-button:hover {
+  background: #e5e7eb;
+}
+
+.review-edit-modal-body {
+  padding: 18px 20px;
+
+  overflow: auto;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  margin-bottom: 14px;
+}
+
+.form-field span {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.form-field input,
+.form-field textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  padding: 9px 10px;
+
+  color: #111827;
+  font-size: 14px;
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.edit-options-section {
+  margin-top: 18px;
+}
+
+.edit-options-section h3 {
+  margin: 0 0 10px;
+
+  color: #111827;
+  font-size: 16px;
+}
+
+.edit-hint {
+  margin: 0 0 10px;
+
+  color: #92400e;
+  font-size: 13px;
+}
+
+.option-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  min-height: 34px;
+}
+
+.option-chip {
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+
+  padding: 6px 10px;
+
+  background: #ffffff;
+  color: #374151;
+
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.option-chip:hover {
+  background: #f3f4f6;
+}
+
+.option-chip.selected {
+  border-color: #4f46e5;
+  background: #eef2ff;
+  color: #3730a3;
+}
+
+.inline-create-row {
+  display: flex;
+  gap: 8px;
+
+  margin-top: 10px;
+}
+
+.inline-create-row input {
+  flex: 1;
+  min-width: 0;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  padding: 8px 10px;
+
+  font-size: 14px;
+}
+
+.modal-error {
+  margin: 14px 0 0;
+
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+.review-edit-modal-footer {
+  padding: 14px 20px;
+
+  border-top: 1px solid #e5e7eb;
+
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

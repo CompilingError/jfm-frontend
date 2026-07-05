@@ -196,3 +196,95 @@
 
   margin-top: 12px;
 }
+
+.file-card-selected {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgb(79 70 229 / 18%);
+}
+
+.file-card-checkbox {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+
+  width: 28px;
+  height: 28px;
+
+  border: 1px solid #c7d2fe;
+  border-radius: 999px;
+
+  background: #ffffff;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+
+  box-shadow: 0 4px 12px rgb(15 23 42 / 16%);
+}
+
+.file-card-checkbox.checked {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: #ffffff;
+}
+
+.file-card-details-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
+  margin-bottom: 12px;
+}
+
+.file-card-details-header strong {
+  color: #111827;
+  font-size: 14px;
+}
+
+.file-card-edit-button {
+  border: none;
+  border-radius: 8px;
+
+  padding: 5px 9px;
+
+  background: #eef2ff;
+  color: #3730a3;
+
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.file-card-edit-button:hover {
+  background: #c7d2fe;
+}
+
+
+.file-card-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-card-approve-button {
+  border: none;
+  border-radius: 8px;
+
+  padding: 5px 9px;
+
+  background: #dcfce7;
+  color: #166534;
+
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.file-card-approve-button:hover {
+  background: #bbf7d0;
+}

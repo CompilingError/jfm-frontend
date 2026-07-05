@@ -13,6 +13,8 @@ export const zh = {
     none: '无',
     yes: '是',
     no: '否',
+    save: '保存',
+    cancel: '取消',
   },
 
   pages: {
@@ -28,6 +30,25 @@ export const zh = {
       scanFailed: '扫描失败，请确认后端正在运行。',
       empty: '暂无待审核文件。',
       pendingCount: '待审核文件数量：{{count}}',
+      enterSelectionMode: '批量选择',
+      exitSelectionMode: '退出选择',
+      selectedCount: '已选择：{{count}}',
+      selectAll: '全选',
+      clearSelection: '取消选择',
+      importing: '正在导入...',
+      importFailed: '导入失败，请检查后端状态或数据是否重复。',
+
+      batch: {
+        tagLabel: '批量标签',
+        artistLabel: '批量演员',
+        selectExistingTag: '选择已有标签',
+        selectExistingArtist: '选择已有演员',
+        newTagPlaceholder: '新标签名称',
+        newArtistPlaceholder: '新演员名称',
+        assign: '添加',
+        createAndAssign: '新建并添加',
+        approveSelected: '批量审核通过',
+      },
     },
 
     tags: {
@@ -79,10 +100,15 @@ export const zh = {
     coverPlaceholder: '封面',
     noArtists: '暂无演员',
     noTags: '暂无标签',
+    detailsTitle: '详情',
 
     actions: {
       like: '标记喜欢',
       unlike: '取消喜欢',
+      select: '选择文件',
+      unselect: '取消选择文件',
+      edit: '编辑',
+      approve: '审核通过',
     },
 
     fields: {
@@ -91,6 +117,29 @@ export const zh = {
       like: '喜欢',
       freshVal: '新鲜度',
       lastWatchedTime: '上次观看',
+    },
+  },
+
+  reviewEditModal: {
+    title: '编辑待审核文件',
+
+    fields: {
+      name: '名称',
+      description: '描述',
+      like: '喜欢',
+      tags: '标签',
+      artists: '演员',
+    },
+
+    placeholders: {
+      newTag: '新标签名称',
+      newArtist: '新演员名称',
+    },
+
+    unresolvedDefaultTags: '以下默认标签还没有匹配到数据库标签：{{names}}',
+
+    errors: {
+      nameRequired: '名称不能为空。',
     },
   },
 };
