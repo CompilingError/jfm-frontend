@@ -1,0 +1,78 @@
+import { request } from './httpClient.js';
+
+export const movieApi = {
+  list({ page = 0, size = 20, sort } = {}) {
+    return request('/movies', {
+      query: {
+        page,
+        size,
+        sort,
+      },
+    });
+  },
+
+  getById(id) {
+    return request(`/movies/id/${id}`);
+  },
+
+  getByName(name) {
+    return request(`/movies/name/${encodeURIComponent(name)}`);
+  },
+
+  findByTags({ tagIds, mode = 'ALL', page = 0, size = 20 }) {
+    return request('/movies/by-tags', {
+      query: {
+        tagIds,
+        mode,
+        page,
+        size,
+      },
+    });
+  },
+
+  findByArtists({ artistIds, mode = 'ANY', page = 0, size = 20 }) {
+    return request('/movies/by-artists', {
+      query: {
+        artistIds,
+        mode,
+        page,
+        size,
+      },
+    });
+  },
+
+  create(data) {
+    return request('/movies', {
+      method: 'POST',
+      body: data,
+    });
+  },
+
+  update(id, data) {
+    return request(`/movies/id/${id}`, {
+      method: 'PUT',
+      body: data,
+    });
+  },
+
+  deleteMany(ids) {
+    return request('/movies', {
+      method: 'DELETE',
+      query: {
+        ids,
+      },
+    });
+  },
+
+  markWatched(id) {
+    return request(`/movies/watched/${id}`, {
+      method: 'POST',
+    });
+  },
+
+  updateFreshVal() {
+    return request('/movies/update-freshval', {
+      method: 'POST',
+    });
+  },
+};

@@ -3,6 +3,8 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { registerSettingsHandlers } from './main/ipc/settingsHandlers.js';
 import { ensureSettingsConfig } from './main/services/settingsStore.js';
+import { registerReviewHandlers } from './main/ipc/reviewHandlers.js';
+import { registerFileHandlers } from './main/ipc/fileHandlers.js';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -37,6 +39,8 @@ app.whenReady().then(async () => {
 
   await ensureSettingsConfig();
   registerSettingsHandlers();
+  registerReviewHandlers();
+  registerFileHandlers();
 
   createWindow();
 

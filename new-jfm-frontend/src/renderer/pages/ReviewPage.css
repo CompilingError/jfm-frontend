@@ -1,0 +1,52 @@
+.review-page {
+  width: 100%;
+  min-height: 100%;
+}
+
+.review-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin-bottom: 20px;
+}
+
+.review-page-header h1 {
+  margin: 0 0 8px;
+}
+
+.review-page-header p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.review-count {
+  margin: 0 0 16px;
+  color: #6b7280;
+}
+
+.review-error {
+  margin: 0 0 16px;
+  color: #b91c1c;
+}
+
+.review-empty {
+  padding: 32px;
+
+  background: #ffffff;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
+
+  color: #6b7280;
+  text-align: center;
+}
+
+.file-card-grid {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  align-items: start;
+}

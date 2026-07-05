@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { t } from '../i18n/index.js';
 import './SettingsPage.css';
+import BackendStatusCard from '../components/settings/BackendStatusCard.jsx';
 
 function SettingsPage() {
   const [config, setConfig] = useState({
@@ -75,6 +76,8 @@ function SettingsPage() {
         <p>{t('settings.description')}</p>
       </header>
 
+      <BackendStatusCard/>
+      
       <section className="settings-section">
         <div className="settings-section-header">
           <div>

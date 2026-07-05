@@ -1,10 +1,12 @@
-.nav-bar {
-  width: 64px;
-  height: 100vh;
+:root {
+  --nav-collapsed-width: 64px;
+  --nav-expanded-width: 184px;
+}
 
-  position: fixed;
-  left: 0;
-  top: 0;
+.nav-bar {
+  width: var(--nav-collapsed-width);
+  flex: 0 0 var(--nav-collapsed-width);
+  height: 100%;
 
   background: #111827;
   color: #f9fafb;
@@ -13,21 +15,28 @@
   flex-direction: column;
 
   overflow: hidden;
-  transition: width 0.2s ease;
+
+  transition:
+    width 0.2s ease,
+    flex-basis 0.2s ease;
 }
 
 .nav-bar:hover {
-  width: 184px;
+  width: var(--nav-expanded-width);
+  flex-basis: var(--nav-expanded-width);
 }
 
 .nav-logo {
   height: 64px;
+
   display: flex;
   align-items: center;
   gap: 12px;
 
   padding: 0 18px;
   border-bottom: 1px solid #374151;
+
+  box-sizing: border-box;
 }
 
 .nav-logo-icon {
@@ -46,15 +55,21 @@
 }
 
 .nav-logo-text {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+
   font-size: 18px;
   font-weight: 700;
   white-space: nowrap;
 
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  transition:
+    max-width 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .nav-bar:hover .nav-logo-text {
+  max-width: 80px;
   opacity: 1;
 }
 
@@ -78,7 +93,9 @@
 }
 
 .nav-item {
+  width: 100%;
   height: 44px;
+
   padding: 0 12px;
 
   display: flex;
@@ -89,6 +106,9 @@
 
   color: #d1d5db;
   text-decoration: none;
+
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .nav-item:hover {
@@ -102,16 +122,25 @@
 }
 
 .nav-icon {
+  width: 24px;
+  height: 24px;
+
   flex-shrink: 0;
 }
 
 .nav-text {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+
   white-space: nowrap;
 
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  transition:
+    max-width 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .nav-bar:hover .nav-text {
+  max-width: 120px;
   opacity: 1;
 }

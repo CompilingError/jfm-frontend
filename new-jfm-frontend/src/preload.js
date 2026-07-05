@@ -17,3 +17,11 @@ contextBridge.exposeInMainWorld('settingsAPI', {
   updatePendingReviewOnNewFile: (value) =>
     ipcRenderer.invoke('settings:update-pending-review-on-new-file', value),
 });
+
+contextBridge.exposeInMainWorld('reviewAPI', {
+  scanPendingFiles: () => ipcRenderer.invoke('review:scan-pending-files'),
+});
+
+contextBridge.exposeInMainWorld('fileSystemAPI', {
+  openFile: (filePath) => ipcRenderer.invoke('file:open', filePath),
+});
