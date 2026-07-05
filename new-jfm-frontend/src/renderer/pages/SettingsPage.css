@@ -1,0 +1,158 @@
+.settings-page {
+  max-width: 900px;
+}
+
+.settings-header {
+  margin-bottom: 24px;
+}
+
+.settings-header h1 {
+  margin: 0 0 8px;
+}
+
+.settings-header p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.settings-section {
+  margin-bottom: 20px;
+  padding: 20px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.settings-section h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.settings-section p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.settings-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.primary-button,
+.danger-button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.primary-button {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+.primary-button:hover {
+  background: #4338ca;
+}
+
+.danger-button {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.danger-button:hover {
+  background: #fecaca;
+}
+
+.empty-text,
+.hint-text {
+  color: #6b7280;
+}
+
+.folder-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.folder-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 10px 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.folder-item:first-child {
+  border-top: none;
+}
+
+.folder-path {
+  font-family: Consolas, monospace;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+.extension-form {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0 10px;
+}
+
+.extension-form input {
+  width: 180px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.extension-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.extension-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 14px;
+}
+
+.chip-remove-button {
+  border: none;
+  background: transparent;
+  color: #3730a3;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.error-text {
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 12px;
+  cursor: pointer;
+}
