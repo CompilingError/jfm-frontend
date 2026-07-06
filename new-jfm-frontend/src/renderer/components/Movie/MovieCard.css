@@ -1,0 +1,149 @@
+.movie-card {
+  width: 100%;
+  min-height: 300px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  overflow: hidden;
+  cursor: pointer;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.movie-card:hover {
+  border-color: #c7d2fe;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 12%);
+  transform: translateY(-1px);
+}
+
+.movie-cover-frame {
+  height: 150px;
+
+  background: #e5e7eb;
+  color: #6b7280;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+
+  overflow: hidden;
+}
+
+.movie-cover-image {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  display: block;
+}
+
+.movie-card-body {
+  padding: 14px 16px 16px;
+}
+
+.movie-card-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+
+  margin-bottom: 8px;
+}
+
+.movie-card-title {
+  margin: 0;
+
+  min-width: 0;
+
+  color: #111827;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-like-indicator {
+  width: 28px;
+  height: 28px;
+
+  color: #9ca3af;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.movie-like-indicator.liked {
+  color: #ef4444;
+}
+
+.movie-like-indicator.liked svg {
+  fill: currentColor;
+}
+
+.movie-card-artists {
+  margin: 0 0 12px;
+
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.4;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-card-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  overflow: hidden;
+  white-space: nowrap;
+
+  margin-bottom: 12px;
+}
+
+.movie-tag {
+  display: inline-flex;
+  align-items: center;
+
+  max-width: 110px;
+  padding: 5px 9px;
+
+  border-radius: 999px;
+
+  background: #eef2ff;
+  color: #3730a3;
+
+  font-size: 13px;
+  line-height: 1;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  flex-shrink: 0;
+}
+
+.movie-card-muted {
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.movie-card-meta {
+  color: #6b7280;
+  font-size: 13px;
+}

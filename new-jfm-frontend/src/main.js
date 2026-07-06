@@ -5,6 +5,7 @@ import { registerSettingsHandlers } from './main/ipc/settingsHandlers.js';
 import { ensureSettingsConfig } from './main/services/settingsStore.js';
 import { registerReviewHandlers } from './main/ipc/reviewHandlers.js';
 import { registerFileHandlers } from './main/ipc/fileHandlers.js';
+import { registerCoverHandlers } from './main/ipc/coverHandlers.js';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -41,7 +42,8 @@ app.whenReady().then(async () => {
   registerSettingsHandlers();
   registerReviewHandlers();
   registerFileHandlers();
-
+  registerCoverHandlers();
+  
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the

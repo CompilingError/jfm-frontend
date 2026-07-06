@@ -1,6 +1,7 @@
 import { Heart } from 'lucide-react';
 import { t } from '../../i18n/index.js';
 import './FileCard.css';
+import { useCover } from '../../hooks/useCover.js';
 
 function normalizeTags(file) {
     if (Array.isArray(file.tags)) {
@@ -38,6 +39,7 @@ function FileCard({
 }) {
     const tags = normalizeTags(file);
     const artists = normalizeArtists(file);
+    const { coverUrl, isLoadingCover } = useCover(file);
 
     async function handleDoubleClick(event) {
         event.stopPropagation();
@@ -99,8 +101,16 @@ function FileCard({
                 </button>
             )}
 
-            <div className="file-cover-placeholder">
-                <span>{t('fileCard.coverPlaceholder')}</span>
+            <div className="file-cover-frame">
+                {coverUrl ? (
+                    <img className="file-cover-image" src={coverUrl} alt="" />
+                ) : (
+                    <span>
+                        {isLoadingCover
+                            ? t('fileCard.generatingCover')
+                            : t('fileCard.coverPlaceholder')}
+                    </span>
+                )}
             </div>
 
             <div className="file-card-body">

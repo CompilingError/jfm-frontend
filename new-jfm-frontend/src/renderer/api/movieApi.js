@@ -1,7 +1,7 @@
 import { request } from './httpClient.js';
 
 export const movieApi = {
-  list({ page = 0, size = 20, sort } = {}) {
+  list({ page = 0, size = 12, sort } = {}) {
     return request('/movies', {
       query: {
         page,

@@ -27,7 +27,7 @@
   z-index: 20;
 }
 
-.file-cover-placeholder {
+.file-cover-frame {
   height: 150px;
 
   border-radius: 14px 14px 0 0;
@@ -39,6 +39,16 @@
   justify-content: center;
 
   font-size: 14px;
+
+  overflow: hidden;
+}
+
+.file-cover-image {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  display: block;
 }
 
 .file-card-body {

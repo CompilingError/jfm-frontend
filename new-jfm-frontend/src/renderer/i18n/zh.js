@@ -20,6 +20,15 @@ export const zh = {
   pages: {
     movies: {
       title: '电影列表',
+      description: '查看已经导入数据库的电影文件。',
+      refresh: '刷新',
+      loading: '加载中...',
+      loadFailed: '加载电影列表失败，请确认后端正在运行。',
+      empty: '暂无电影。',
+      totalCount: '电影数量：{{count}}',
+      pageInfo: '第 {{current}} / {{total}} 页',
+      previousPage: '上一页',
+      nextPage: '下一页',
     },
 
     review: {
@@ -96,8 +105,20 @@ export const zh = {
     },
   },
 
+  movieCard: {
+    coverPlaceholder: '封面',
+    generatingCover: '生成封面中...',
+    noArtists: '暂无演员',
+    noTags: '暂无标签',
+
+    fields: {
+      freshVal: '新鲜度',
+    },
+  },
+
   fileCard: {
     coverPlaceholder: '封面',
+    generatingCover: '生成封面中...',
     noArtists: '暂无演员',
     noTags: '暂无标签',
     detailsTitle: '详情',

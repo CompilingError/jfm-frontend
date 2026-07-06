@@ -25,3 +25,7 @@ contextBridge.exposeInMainWorld('reviewAPI', {
 contextBridge.exposeInMainWorld('fileSystemAPI', {
   openFile: (filePath) => ipcRenderer.invoke('file:open', filePath),
 });
+
+contextBridge.exposeInMainWorld('coverAPI', {
+  getCover: (payload) => ipcRenderer.invoke('cover:get-cover', payload),
+});
