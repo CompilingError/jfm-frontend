@@ -29,6 +29,9 @@ export const zh = {
       pageInfo: '第 {{current}} / {{total}} 页',
       previousPage: '上一页',
       nextPage: '下一页',
+      updateFailed: '更新电影失败，请检查后端状态。',
+      deleteFailed: '删除电影失败，请检查后端状态。',
+      deleteConfirm: '确定要删除“{{name}}”吗？',
     },
 
     review: {
@@ -110,9 +113,44 @@ export const zh = {
     generatingCover: '生成封面中...',
     noArtists: '暂无演员',
     noTags: '暂无标签',
+    detailsTitle: '详情',
+
+    actions: {
+      like: '标记喜欢',
+      unlike: '取消喜欢',
+      edit: '编辑',
+      delete: '删除',
+    },
 
     fields: {
+      path: '路径',
+      description: '描述',
+      like: '喜欢',
       freshVal: '新鲜度',
+    },
+  },
+
+  movieEditModal: {
+    title: '编辑电影',
+
+    fields: {
+      name: '名称',
+      path: '路径',
+      description: '描述',
+      like: '喜欢',
+      freshVal: '新鲜度',
+      tags: '标签',
+      artists: '演员',
+    },
+
+    placeholders: {
+      newTag: '新标签名称',
+      newArtist: '新演员名称',
+    },
+
+    errors: {
+      nameRequired: '名称不能为空。',
+      pathRequired: '路径不能为空。',
     },
   },
 

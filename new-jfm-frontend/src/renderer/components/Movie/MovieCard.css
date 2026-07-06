@@ -1,4 +1,6 @@
 .movie-card {
+  position: relative;
+
   width: 100%;
   min-height: 300px;
 
@@ -6,7 +8,7 @@
   border: 1px solid #e5e7eb;
   border-radius: 14px;
 
-  overflow: hidden;
+  overflow: visible;
   cursor: pointer;
 
   transition:
@@ -21,9 +23,14 @@
   transform: translateY(-1px);
 }
 
+.movie-card-expanded {
+  z-index: 20;
+}
+
 .movie-cover-frame {
   height: 150px;
 
+  border-radius: 14px 14px 0 0;
   background: #e5e7eb;
   color: #6b7280;
 
@@ -72,24 +79,38 @@
   text-overflow: ellipsis;
 }
 
-.movie-like-indicator {
+.movie-like-button {
   width: 28px;
   height: 28px;
 
+  border: none;
+  border-radius: 999px;
+  background: transparent;
   color: #9ca3af;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
+  padding: 0;
+  cursor: pointer;
   flex-shrink: 0;
+
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
 }
 
-.movie-like-indicator.liked {
+.movie-like-button:hover {
+  background: #fee2e2;
   color: #ef4444;
 }
 
-.movie-like-indicator.liked svg {
+.movie-like-button.liked {
+  color: #ef4444;
+}
+
+.movie-like-button.liked svg {
   fill: currentColor;
 }
 
@@ -146,4 +167,97 @@
 .movie-card-meta {
   color: #6b7280;
   font-size: 13px;
+}
+
+.movie-card-details {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+
+  margin-top: 8px;
+  padding: 14px 16px;
+
+  background: #ffffff;
+  border: 1px solid #c7d2fe;
+  border-radius: 14px;
+
+  box-shadow: 0 12px 32px rgb(15 23 42 / 18%);
+}
+
+.movie-card-details-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
+  margin-bottom: 12px;
+}
+
+.movie-card-details-header strong {
+  color: #111827;
+  font-size: 14px;
+}
+
+.movie-card-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.movie-card-edit-button,
+.movie-card-delete-button {
+  border: none;
+  border-radius: 8px;
+
+  padding: 5px 9px;
+
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.movie-card-edit-button {
+  background: #eef2ff;
+  color: #3730a3;
+}
+
+.movie-card-edit-button:hover {
+  background: #c7d2fe;
+}
+
+.movie-card-delete-button {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.movie-card-delete-button:hover {
+  background: #fecaca;
+}
+
+.movie-card-detail-row {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: 10px;
+
+  margin-bottom: 10px;
+
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.movie-card-detail-label {
+  color: #6b7280;
+}
+
+.movie-card-detail-value {
+  color: #111827;
+  word-break: break-all;
+}
+
+.movie-card-all-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  margin-top: 12px;
 }
