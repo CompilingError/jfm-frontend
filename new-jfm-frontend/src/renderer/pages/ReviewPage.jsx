@@ -5,6 +5,7 @@ import { t } from '../i18n/index.js';
 import './ReviewPage.css';
 import ReviewEditModal from '../components/review/ReviewEditModal.jsx';
 import { importPendingFileToBackend } from '../services/reviewImportService.js';
+import { useToast } from '../components/common/toast/ToastProvider.jsx';
 
 function ReviewPage() {
   const [pendingFiles, setPendingFiles] = useState([]);
@@ -15,9 +16,10 @@ function ReviewPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [editingFile, setEditingFile] = useState(null);
   const [isImporting, setIsImporting] = useState(false);
+  const toast = useToast();
 
   async function handleScanPendingFiles(event) {
-    event.stopPropagation();
+    event?.stopPropagation?.();
 
     setIsScanning(true);
     setErrorMessage('');
@@ -27,8 +29,15 @@ function ReviewPage() {
     try {
       const scannedFiles = await window.reviewAPI.scanPendingFiles();
       setPendingFiles(scannedFiles);
+
+      toast.success(
+        t('pages.review.scanSuccess', {
+          count: scannedFiles.length,
+        })
+      );
     } catch {
       setErrorMessage(t('pages.review.scanFailed'));
+      toast.error(t('pages.review.scanFailed'));
     } finally {
       setIsScanning(false);
     }
@@ -80,6 +89,7 @@ function ReviewPage() {
     );
 
     setEditingFile(null);
+    toast.success(t('pages.review.editSuccess'));
   }
 
   async function handleApproveFile(file) {
@@ -98,14 +108,26 @@ function ReviewPage() {
       );
 
       setExpandedFileId(null);
+
+      toast.success(
+        t('pages.review.importSuccess', {
+          name: file.name,
+        })
+      );
     } catch {
       setErrorMessage(t('pages.review.importFailed'));
+      toast.error(t('pages.review.importFailed'));
     } finally {
       setIsImporting(false);
     }
   }
 
   async function handleApproveSelectedFiles() {
+    if (selectedFileIds.length === 0) {
+      toast.warning(t('pages.review.noSelection'));
+      return;
+    }
+
     setIsImporting(true);
     setErrorMessage('');
 
@@ -127,7 +149,31 @@ function ReviewPage() {
 
       setSelectedFileIds([]);
       setExpandedFileId(null);
+
+      toast.success(
+        t('pages.review.batchImportSuccess', {
+          count: importedFileIds.length,
+        })
+      );
     } catch {
+      if (importedFileIds.length > 0) {
+        setPendingFiles((currentFiles) =>
+          currentFiles.filter((file) => !importedFileIds.includes(file.id))
+        );
+
+        setSelectedFileIds((currentIds) =>
+          currentIds.filter((id) => !importedFileIds.includes(id))
+        );
+
+        toast.warning(
+          t('pages.review.batchImportPartialSuccess', {
+            count: importedFileIds.length,
+          })
+        );
+      } else {
+        toast.error(t('pages.review.importFailed'));
+      }
+
       setErrorMessage(t('pages.review.importFailed'));
     } finally {
       setIsImporting(false);
@@ -151,6 +197,11 @@ function ReviewPage() {
   }
 
   function handleAssignTagToSelectedFiles(tag) {
+    if (selectedFileIds.length === 0) {
+      toast.warning(t('pages.review.noSelection'));
+      return;
+    }
+
     setPendingFiles((currentFiles) =>
       currentFiles.map((file) => {
         if (!selectedFileIds.includes(file.id)) {
@@ -166,9 +217,21 @@ function ReviewPage() {
         };
       })
     );
+
+    toast.success(
+      t('pages.review.assignTagSuccess', {
+        name: tag.name,
+        count: selectedFileIds.length,
+      })
+    );
   }
 
   function handleAssignArtistToSelectedFiles(artist) {
+    if (selectedFileIds.length === 0) {
+      toast.warning(t('pages.review.noSelection'));
+      return;
+    }
+
     setPendingFiles((currentFiles) =>
       currentFiles.map((file) => {
         if (!selectedFileIds.includes(file.id)) {
@@ -179,6 +242,13 @@ function ReviewPage() {
           ...file,
           artists: mergeByIdOrName(file.artists, artist),
         };
+      })
+    );
+
+    toast.success(
+      t('pages.review.assignArtistSuccess', {
+        name: artist.name,
+        count: selectedFileIds.length,
       })
     );
   }
@@ -263,13 +333,13 @@ function ReviewPage() {
           count: pendingFiles.length,
         })}
         {isImporting && (
-        <p className="review-importing">
-          {t('pages.review.importing')}
-        </p>
-      )}
+          <p className="review-importing">
+            {t('pages.review.importing')}
+          </p>
+        )}
       </p>
 
-      
+
 
       {isSelectionMode && (
         <ReviewBatchActionBar

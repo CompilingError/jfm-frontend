@@ -1,27 +1,4 @@
-.movie-filter-bar {
-  margin-bottom: 18px;
-  padding: 14px 16px;
-
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-}
-
-.movie-filter-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.movie-filter-header strong {
-  color: #111827;
-  font-size: 15px;
-}
-
 .movie-filter-primary-row {
-  margin-top: 14px;
-
   display: grid;
   grid-template-columns:
     minmax(150px, 180px)

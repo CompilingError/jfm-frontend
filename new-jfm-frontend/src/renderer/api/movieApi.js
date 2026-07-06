@@ -85,6 +85,7 @@ export const movieApi = {
     like,
     minFreshVal,
     maxFreshVal,
+    sort,
     page = 0,
     size = 20,
   } = {}) {
@@ -98,6 +99,7 @@ export const movieApi = {
         like,
         minFreshVal,
         maxFreshVal,
+        sort,
         page,
         size,
       },

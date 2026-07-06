@@ -5,6 +5,7 @@ import MovieEditModal from '../components/movie/MovieEditModal.jsx';
 import MovieFilterBar from '../components/movie/MovieFilterBar.jsx';
 import { t } from '../i18n/index.js';
 import './MovieListPage.css';
+import { useToast } from '../components/common/toast/ToastProvider.jsx';
 
 const PAGE_SIZE = 20;
 
@@ -17,6 +18,7 @@ const DEFAULT_FILTERS = {
   like: undefined,
   minFreshVal: undefined,
   maxFreshVal: undefined,
+  sort: 'id,desc',
 };
 
 function normalizeMoviePage(response) {
@@ -51,6 +53,8 @@ function MovieListPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  const toast = useToast();
+
   async function loadMovies(nextPageNumber = pageNumber, nextFilters = filters) {
     setIsLoading(true);
     setErrorMessage('');
@@ -70,6 +74,7 @@ function MovieListPage() {
       setTotalElements(normalizedPage.totalElements);
     } catch {
       setErrorMessage(t('pages.movies.loadFailed'));
+      toast.error(t('pages.movies.loadFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -124,8 +129,10 @@ function MovieListPage() {
       );
 
       setEditingMovie(null);
+      toast.success(t('pages.movies.updateSuccess'));
     } catch {
       setErrorMessage(t('pages.movies.updateFailed'));
+      toast.error(t('pages.movies.updateFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -153,9 +160,11 @@ function MovieListPage() {
       );
 
       setExpandedMovieId(null);
+      toast.success(t('pages.movies.deleteSuccess'));
     } catch (error) {
       console.error('[movie delete failed]', error);
       setErrorMessage(t('pages.movies.deleteFailed'));
+      toast.error(t('pages.movies.deleteFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -190,8 +199,44 @@ function MovieListPage() {
           return updatedMovie;
         })
       );
+
+      toast.success(
+        nextLikeValue
+          ? t('pages.movies.likeSuccess')
+          : t('pages.movies.unlikeSuccess')
+      );
     } catch {
       setErrorMessage(t('pages.movies.updateFailed'));
+      toast.error(t('pages.movies.updateFailed'));
+    }
+  }
+
+  async function handleOpenMovie(movie) {
+    setErrorMessage('');
+
+    try {
+      await window.fileSystemAPI.openFile(movie.path);
+
+      await movieApi.markWatched(movie.id);
+
+      setMovies((currentMovies) =>
+        currentMovies.map((currentMovie) => {
+          if (currentMovie.id !== movie.id) {
+            return currentMovie;
+          }
+
+          return {
+            ...currentMovie,
+            freshVal: Math.max(0, (currentMovie.freshVal ?? 0) - 30),
+          };
+        })
+      );
+
+      toast.success(t('pages.movies.watchedSuccess'));
+    } catch (error) {
+      console.error('[movie open or watched failed]', error);
+      setErrorMessage(t('pages.movies.openFailed'));
+      toast.error(t('pages.movies.openFailed'));
     }
   }
 
@@ -281,6 +326,7 @@ function MovieListPage() {
               onEdit={setEditingMovie}
               onDelete={handleDeleteMovie}
               onLikeChange={handleLikeChange}
+              onOpen={handleOpenMovie}
             />
           ))}
         </div>

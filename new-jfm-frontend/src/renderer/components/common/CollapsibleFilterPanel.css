@@ -1,0 +1,45 @@
+.collapsible-filter-panel {
+  margin-bottom: 18px;
+  padding: 14px 16px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+}
+
+.collapsible-filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.collapsible-filter-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  min-width: 0;
+}
+
+.collapsible-filter-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.collapsible-filter-body {
+  margin-top: 14px;
+}
+
+@media (max-width: 720px) {
+  .collapsible-filter-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .collapsible-filter-right {
+    justify-content: flex-start;
+  }
+}

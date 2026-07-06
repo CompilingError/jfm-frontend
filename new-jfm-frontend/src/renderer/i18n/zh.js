@@ -30,8 +30,14 @@ export const zh = {
       previousPage: '上一页',
       nextPage: '下一页',
       updateFailed: '更新电影失败，请检查后端状态。',
+      updateSuccess: '电影已更新。',
       deleteFailed: '删除电影失败，请检查后端状态。',
+      deleteSuccess: '电影已删除。',
       deleteConfirm: '确定要删除“{{name}}”吗？',
+      openFailed: '打开文件或更新观看状态失败。',
+      likeSuccess: '已标记喜欢。',
+      unlikeSuccess: '已取消喜欢。',
+      watchedSuccess: '已更新观看状态。',
     },
 
     review: {
@@ -49,6 +55,14 @@ export const zh = {
       clearSelection: '取消选择',
       importing: '正在导入...',
       importFailed: '导入失败，请检查后端状态或数据是否重复。',
+      scanSuccess: '扫描完成，发现 {{count}} 个待审核文件。',
+      editSuccess: '待审核文件已更新。',
+      noSelection: '请先选择至少一个文件。',
+      assignTagSuccess: '已为 {{count}} 个文件添加标签：{{name}}。',
+      assignArtistSuccess: '已为 {{count}} 个文件添加演员：{{name}}。',
+      importSuccess: '已导入：{{name}}。',
+      batchImportSuccess: '已导入 {{count}} 个文件。',
+      batchImportPartialSuccess: '已导入 {{count}} 个文件，部分文件导入失败。',
 
       batch: {
         tagLabel: '批量标签',
@@ -60,6 +74,9 @@ export const zh = {
         assign: '添加',
         createAndAssign: '新建并添加',
         approveSelected: '批量审核通过',
+        loadOptionsFailed: '加载标签或演员失败。',
+        createTagFailed: '新建标签失败。',
+        createArtistFailed: '新建演员失败。',
       },
     },
 
@@ -106,6 +123,20 @@ export const zh = {
       checkboxLabel: '监视目录中扫描到的新文件默认进入审核页面',
       hint: '当前只保存这个设置。新文件如何显示在审核页面，会在下一步实现。',
     },
+
+    messages: {
+      loadFailed: '加载设置失败。',
+      addFolderSuccess: '监视目录已添加。',
+      addFolderFailed: '添加监视目录失败。',
+      removeFolderSuccess: '监视目录已移除。',
+      removeFolderFailed: '移除监视目录失败。',
+      addExtensionSuccess: '文件类型已添加。',
+      addExtensionFailed: '添加文件类型失败。',
+      removeExtensionSuccess: '文件类型已移除。',
+      removeExtensionFailed: '移除文件类型失败。',
+      pendingReviewUpdateSuccess: '新增文件处理设置已更新。',
+      pendingReviewUpdateFailed: '更新新增文件处理设置失败。',
+    },
   },
 
   movieCard: {
@@ -150,6 +181,14 @@ export const zh = {
     maxFreshVal: '最高新鲜度',
     apply: '应用筛选',
     clear: '清空筛选',
+    sort: '排序',
+    sortNewest: '最新导入',
+    sortOldest: '最早导入',
+    sortNameAsc: '名称 A-Z',
+    sortNameDesc: '名称 Z-A',
+    sortFreshHigh: '新鲜度高到低',
+    sortFreshLow: '新鲜度低到高',
+    sortLikedFirst: '喜欢优先',
   },
 
   movieEditModal: {

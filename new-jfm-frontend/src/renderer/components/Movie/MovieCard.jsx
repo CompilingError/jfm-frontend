@@ -26,6 +26,7 @@ function MovieCard({
     onEdit,
     onDelete,
     onLikeChange,
+    onOpen,
 }) {
     const tags = normalizeTags(movie);
     const artists = normalizeArtists(movie);
@@ -38,7 +39,7 @@ function MovieCard({
             return;
         }
 
-        await window.fileSystemAPI.openFile(movie.path);
+        await onOpen(movie);
     }
 
     function handleClick(event) {

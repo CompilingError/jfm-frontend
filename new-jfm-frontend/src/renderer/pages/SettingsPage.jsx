@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { t } from '../i18n/index.js';
 import './SettingsPage.css';
 import BackendStatusCard from '../components/settings/BackendStatusCard.jsx';
+import { useToast } from '../components/common/toast/ToastProvider.jsx';
 
 function SettingsPage() {
   const [config, setConfig] = useState({
@@ -13,56 +14,92 @@ function SettingsPage() {
   const [newExtension, setNewExtension] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+  const toast = useToast();
+
   async function loadConfig() {
-    const loadedConfig = await window.settingsAPI.getConfig();
-    setConfig(loadedConfig);
+    try {
+      const loadedConfig = await window.settingsAPI.getConfig();
+      setConfig(loadedConfig);
+    } catch {
+      toast.error(t('settings.messages.loadFailed'));
+    }
   }
 
-  async function handleAddFolder() {
-    const updatedConfig = await window.settingsAPI.addWatchedFolder();
-    setConfig(updatedConfig);
+  async function handleAddWatchedFolder() {
+    try {
+      const updatedConfig = await window.settingsAPI.addWatchedFolder();
+
+      if (!updatedConfig) {
+        return;
+      }
+
+      setConfig(updatedConfig);
+      toast.success(t('settings.messages.addFolderSuccess'));
+    } catch {
+      toast.error(t('settings.messages.addFolderFailed'));
+    }
   }
 
-  async function handleRemoveFolder(folderPath) {
-    const updatedConfig = await window.settingsAPI.removeWatchedFolder(
-      folderPath
-    );
+  async function handleRemoveWatchedFolder(folderPath) {
+    try {
+      const updatedConfig = await window.settingsAPI.removeWatchedFolder(
+        folderPath
+      );
 
-    setConfig(updatedConfig);
+      setConfig(updatedConfig);
+      toast.success(t('settings.messages.removeFolderSuccess'));
+    } catch {
+      toast.error(t('settings.messages.removeFolderFailed'));
+    }
   }
 
-  async function handleAddExtension(event) {
-    event.preventDefault();
+  async function handleAddAllowedExtension() {
+    const trimmedExtension = newExtension.trim().toLowerCase();
 
-    setErrorMessage('');
+    if (!trimmedExtension.startsWith('.')) {
+      toast.warning(t('settings.allowedExtensions.invalidMessage'));
+      return;
+    }
 
     try {
       const updatedConfig = await window.settingsAPI.addAllowedExtension(
-        newExtension
+        trimmedExtension
       );
 
       setConfig(updatedConfig);
       setNewExtension('');
-    } catch {
-      setErrorMessage(t('settings.allowedExtensions.invalidMessage'));
+      toast.success(t('settings.messages.addExtensionSuccess'));
+    } catch (error) {
+      console.error('[settings add extension failed]', error);
+      toast.error(t('settings.messages.addExtensionFailed'));
     }
   }
 
-  async function handleRemoveExtension(extension) {
-    const updatedConfig = await window.settingsAPI.removeAllowedExtension(
-      extension
-    );
+  async function handleRemoveAllowedExtension(extension) {
+    try {
+      const updatedConfig = await window.settingsAPI.removeAllowedExtension(
+        extension
+      );
 
-    setConfig(updatedConfig);
+      setConfig(updatedConfig);
+      toast.success(t('settings.messages.removeExtensionSuccess'));
+    } catch {
+      toast.error(t('settings.messages.removeExtensionFailed'));
+    }
   }
 
   async function handlePendingReviewChange(event) {
-    const updatedConfig =
-      await window.settingsAPI.updatePendingReviewOnNewFile(
-        event.target.checked
-      );
+    const nextValue = event.target.checked;
 
-    setConfig(updatedConfig);
+    try {
+      const updatedConfig =
+        await window.settingsAPI.updatePendingReviewOnNewFile(nextValue);
+
+      setConfig(updatedConfig);
+      toast.success(t('settings.messages.pendingReviewUpdateSuccess'));
+    } catch {
+      toast.error(t('settings.messages.pendingReviewUpdateFailed'));
+    }
   }
 
   useEffect(() => {
@@ -76,8 +113,8 @@ function SettingsPage() {
         <p>{t('settings.description')}</p>
       </header>
 
-      <BackendStatusCard/>
-      
+      <BackendStatusCard />
+
       <section className="settings-section">
         <div className="settings-section-header">
           <div>
@@ -85,7 +122,7 @@ function SettingsPage() {
             <p>{t('settings.watchedFolders.description')}</p>
           </div>
 
-          <button className="primary-button" onClick={handleAddFolder}>
+          <button className="primary-button" onClick={handleAddWatchedFolder}>
             {t('settings.watchedFolders.addButton')}
           </button>
         </div>
@@ -100,7 +137,7 @@ function SettingsPage() {
 
                 <button
                   className="danger-button"
-                  onClick={() => handleRemoveFolder(folderPath)}
+                  onClick={() => handleRemoveWatchedFolder(folderPath)}
                 >
                   {t('common.remove')}
                 </button>
@@ -118,7 +155,7 @@ function SettingsPage() {
           </div>
         </div>
 
-        <form className="extension-form" onSubmit={handleAddExtension}>
+        <form className="extension-form" onSubmit={handleAddAllowedExtension}>
           <input
             value={newExtension}
             onChange={(event) => setNewExtension(event.target.value)}
@@ -139,7 +176,7 @@ function SettingsPage() {
 
               <button
                 className="chip-remove-button"
-                onClick={() => handleRemoveExtension(extension)}
+                onClick={() => handleRemoveAllowedExtension(extension)}
                 aria-label={t(
                   'settings.allowedExtensions.removeAriaLabel',
                   { extension }

@@ -3,6 +3,7 @@ import { artistApi } from '../../api/artistApi.js';
 import { tagApi } from '../../api/tagApi.js';
 import { t } from '../../i18n/index.js';
 import './ReviewBatchActionBar.css';
+import { useToast } from '../common/toast/ToastProvider.jsx';
 
 function ReviewBatchActionBar({
     selectedCount,
@@ -20,15 +21,20 @@ function ReviewBatchActionBar({
 
     const [newTagName, setNewTagName] = useState('');
     const [newArtistName, setNewArtistName] = useState('');
+    const toast = useToast();
 
     async function loadOptions() {
-        const [loadedTags, loadedArtists] = await Promise.all([
-            tagApi.list(),
-            artistApi.list(),
-        ]);
+        try {
+            const [loadedTags, loadedArtists] = await Promise.all([
+                tagApi.list(),
+                artistApi.list(),
+            ]);
 
-        setTags(loadedTags);
-        setArtists(loadedArtists);
+            setTags(loadedTags);
+            setArtists(loadedArtists);
+        } catch {
+            toast.error(t('pages.review.batch.loadOptionsFailed'));
+        }
     }
 
     async function handleAssignExistingTag() {
@@ -52,11 +58,15 @@ function ReviewBatchActionBar({
             return;
         }
 
-        const createdTag = await tagApi.create(trimmedName);
+        try {
+            const createdTag = await tagApi.create(trimmedName);
 
-        setTags((currentTags) => [...currentTags, createdTag]);
-        setNewTagName('');
-        onAssignTag(createdTag);
+            setTags((currentTags) => [...currentTags, createdTag]);
+            setNewTagName('');
+            onAssignTag(createdTag);
+        } catch {
+            toast.error(t('pages.review.batch.createTagFailed'));
+        }
     }
 
     async function handleAssignExistingArtist() {
@@ -80,11 +90,15 @@ function ReviewBatchActionBar({
             return;
         }
 
-        const createdArtist = await artistApi.create(trimmedName);
+        try {
+            const createdArtist = await artistApi.create(trimmedName);
 
-        setArtists((currentArtists) => [...currentArtists, createdArtist]);
-        setNewArtistName('');
-        onAssignArtist(createdArtist);
+            setArtists((currentArtists) => [...currentArtists, createdArtist]);
+            setNewArtistName('');
+            onAssignArtist(createdArtist);
+        } catch {
+            toast.error(t('pages.review.batch.createArtistFailed'));
+        }
     }
 
     useEffect(() => {
