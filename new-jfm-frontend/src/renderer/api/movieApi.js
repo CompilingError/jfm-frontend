@@ -55,11 +55,11 @@ export const movieApi = {
     });
   },
 
-  deleteMany(ids) {
+  deleteByIds(ids) {
     return request('/movies', {
       method: 'DELETE',
       query: {
-        ids,
+        ids: Array.isArray(ids) ? ids : [ids],
       },
     });
   },
@@ -73,6 +73,34 @@ export const movieApi = {
   updateFreshVal() {
     return request('/movies/update-freshval', {
       method: 'POST',
+    });
+  },
+
+  search({
+    name,
+    tagIds = [],
+    tagMode = 'ALL',
+    artistIds = [],
+    artistMode = 'ANY',
+    like,
+    minFreshVal,
+    maxFreshVal,
+    page = 0,
+    size = 20,
+  } = {}) {
+    return request('/movies/search', {
+      query: {
+        name,
+        tagIds,
+        tagMode,
+        artistIds,
+        artistMode,
+        like,
+        minFreshVal,
+        maxFreshVal,
+        page,
+        size,
+      },
     });
   },
 };

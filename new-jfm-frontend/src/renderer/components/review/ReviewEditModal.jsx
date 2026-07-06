@@ -3,12 +3,7 @@ import { artistApi } from '../../api/artistApi.js';
 import { tagApi } from '../../api/tagApi.js';
 import { t } from '../../i18n/index.js';
 import './ReviewEditModal.css';
-
-function getItemIds(items = []) {
-  return items
-    .filter((item) => item.id !== undefined && item.id !== null)
-    .map((item) => String(item.id));
-}
+import SearchableChipInput from '../common/SearchableChipInput.jsx';
 
 function ReviewEditModal({ file, onClose, onSave }) {
   const [name, setName] = useState(file.name ?? '');
@@ -18,13 +13,8 @@ function ReviewEditModal({ file, onClose, onSave }) {
   const [tags, setTags] = useState([]);
   const [artists, setArtists] = useState([]);
 
-  const [selectedTagIds, setSelectedTagIds] = useState(getItemIds(file.tags));
-  const [selectedArtistIds, setSelectedArtistIds] = useState(
-    getItemIds(file.artists)
-  );
-
-  const [newTagName, setNewTagName] = useState('');
-  const [newArtistName, setNewArtistName] = useState('');
+  const [selectedTags, setSelectedTags] = useState(file.tags ?? []);
+  const [selectedArtists, setSelectedArtists] = useState(file.artists ?? []);
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -48,13 +38,18 @@ function ReviewEditModal({ file, onClose, onSave }) {
     setArtists(loadedArtists);
 
     if (Array.isArray(file.defaultTagNames)) {
-      const matchedDefaultTagIds = loadedTags
-        .filter((tag) => file.defaultTagNames.includes(tag.name))
-        .map((tag) => String(tag.id));
+      const matchedDefaultTags = loadedTags.filter((tag) =>
+        file.defaultTagNames.includes(tag.name)
+      );
 
-      setSelectedTagIds((currentIds) => {
-        const mergedIds = new Set([...currentIds, ...matchedDefaultTagIds]);
-        return Array.from(mergedIds);
+      setSelectedTags((currentTags) => {
+        const existingIds = new Set(currentTags.map((tag) => String(tag.id)));
+
+        const newTags = matchedDefaultTags.filter(
+          (tag) => !existingIds.has(String(tag.id))
+        );
+
+        return [...currentTags, ...newTags];
       });
     }
   }
@@ -69,35 +64,20 @@ function ReviewEditModal({ file, onClose, onSave }) {
     });
   }
 
-  async function handleCreateTag() {
-    const trimmedName = newTagName.trim();
-
-    if (!trimmedName) {
-      return;
-    }
-
-    const createdTag = await tagApi.create(trimmedName);
+  async function handleCreateTag(name) {
+    const createdTag = await tagApi.create(name);
 
     setTags((currentTags) => [...currentTags, createdTag]);
-    setSelectedTagIds((currentIds) => [...currentIds, String(createdTag.id)]);
-    setNewTagName('');
+
+    return createdTag;
   }
 
-  async function handleCreateArtist() {
-    const trimmedName = newArtistName.trim();
-
-    if (!trimmedName) {
-      return;
-    }
-
-    const createdArtist = await artistApi.create(trimmedName);
+  async function handleCreateArtist(name) {
+    const createdArtist = await artistApi.create(name);
 
     setArtists((currentArtists) => [...currentArtists, createdArtist]);
-    setSelectedArtistIds((currentIds) => [
-      ...currentIds,
-      String(createdArtist.id),
-    ]);
-    setNewArtistName('');
+
+    return createdArtist;
   }
 
   function handleSave() {
@@ -107,14 +87,6 @@ function ReviewEditModal({ file, onClose, onSave }) {
       setErrorMessage(t('reviewEditModal.errors.nameRequired'));
       return;
     }
-
-    const selectedTags = tags.filter((tag) =>
-      selectedTagIds.includes(String(tag.id))
-    );
-
-    const selectedArtists = artists.filter((artist) =>
-      selectedArtistIds.includes(String(artist.id))
-    );
 
     onSave({
       ...file,
@@ -177,77 +149,25 @@ function ReviewEditModal({ file, onClose, onSave }) {
           </label>
 
           <section className="edit-options-section">
-            <h3>{t('reviewEditModal.fields.tags')}</h3>
-
-            {unresolvedDefaultTagNames.length > 0 && (
-              <p className="edit-hint">
-                {t('reviewEditModal.unresolvedDefaultTags', {
-                  names: unresolvedDefaultTagNames.join(', '),
-                })}
-              </p>
-            )}
-
-            <div className="option-chip-list">
-              {tags.map((tag) => {
-                const id = String(tag.id);
-                const isSelected = selectedTagIds.includes(id);
-
-                return (
-                  <button
-                    key={tag.id}
-                    className={`option-chip ${isSelected ? 'selected' : ''}`}
-                    onClick={() => toggleSelectedId(id, setSelectedTagIds)}
-                  >
-                    {tag.name}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="inline-create-row">
-              <input
-                value={newTagName}
-                onChange={(event) => setNewTagName(event.target.value)}
-                placeholder={t('reviewEditModal.placeholders.newTag')}
-              />
-
-              <button className="secondary-button" onClick={handleCreateTag}>
-                {t('common.add')}
-              </button>
-            </div>
+            <SearchableChipInput
+              label={t('reviewEditModal.fields.tags')}
+              placeholder={t('reviewEditModal.placeholders.newTag')}
+              options={tags}
+              selectedItems={selectedTags}
+              onChange={setSelectedTags}
+              onCreate={handleCreateTag}
+            />
           </section>
 
           <section className="edit-options-section">
-            <h3>{t('reviewEditModal.fields.artists')}</h3>
-
-            <div className="option-chip-list">
-              {artists.map((artist) => {
-                const id = String(artist.id);
-                const isSelected = selectedArtistIds.includes(id);
-
-                return (
-                  <button
-                    key={artist.id}
-                    className={`option-chip ${isSelected ? 'selected' : ''}`}
-                    onClick={() => toggleSelectedId(id, setSelectedArtistIds)}
-                  >
-                    {artist.name}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="inline-create-row">
-              <input
-                value={newArtistName}
-                onChange={(event) => setNewArtistName(event.target.value)}
-                placeholder={t('reviewEditModal.placeholders.newArtist')}
-              />
-
-              <button className="secondary-button" onClick={handleCreateArtist}>
-                {t('common.add')}
-              </button>
-            </div>
+            <SearchableChipInput
+              label={t('reviewEditModal.fields.artists')}
+              placeholder={t('reviewEditModal.placeholders.newArtist')}
+              options={artists}
+              selectedItems={selectedArtists}
+              onChange={setSelectedArtists}
+              onCreate={handleCreateArtist}
+            />
           </section>
 
           {errorMessage && <p className="modal-error">{errorMessage}</p>}

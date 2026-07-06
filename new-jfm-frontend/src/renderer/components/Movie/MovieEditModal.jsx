@@ -3,12 +3,7 @@ import { artistApi } from '../../api/artistApi.js';
 import { tagApi } from '../../api/tagApi.js';
 import { t } from '../../i18n/index.js';
 import './MovieEditModal.css';
-
-function getItemIds(items = []) {
-  return items
-    .filter((item) => item.id !== undefined && item.id !== null)
-    .map((item) => String(item.id));
-}
+import SearchableChipInput from '../common/SearchableChipInput.jsx';
 
 function MovieEditModal({ movie, onClose, onSave }) {
   const [name, setName] = useState(movie.name ?? '');
@@ -20,13 +15,8 @@ function MovieEditModal({ movie, onClose, onSave }) {
   const [tags, setTags] = useState([]);
   const [artists, setArtists] = useState([]);
 
-  const [selectedTagIds, setSelectedTagIds] = useState(getItemIds(movie.tags));
-  const [selectedArtistIds, setSelectedArtistIds] = useState(
-    getItemIds(movie.artists)
-  );
-
-  const [newTagName, setNewTagName] = useState('');
-  const [newArtistName, setNewArtistName] = useState('');
+  const [selectedTags, setSelectedTags] = useState(movie.tags ?? []);
+  const [selectedArtists, setSelectedArtists] = useState(movie.artists ?? []);
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -50,35 +40,20 @@ function MovieEditModal({ movie, onClose, onSave }) {
     });
   }
 
-  async function handleCreateTag() {
-    const trimmedName = newTagName.trim();
-
-    if (!trimmedName) {
-      return;
-    }
-
-    const createdTag = await tagApi.create(trimmedName);
+  async function handleCreateTag(name) {
+    const createdTag = await tagApi.create(name);
 
     setTags((currentTags) => [...currentTags, createdTag]);
-    setSelectedTagIds((currentIds) => [...currentIds, String(createdTag.id)]);
-    setNewTagName('');
+
+    return createdTag;
   }
 
-  async function handleCreateArtist() {
-    const trimmedName = newArtistName.trim();
-
-    if (!trimmedName) {
-      return;
-    }
-
-    const createdArtist = await artistApi.create(trimmedName);
+  async function handleCreateArtist(name) {
+    const createdArtist = await artistApi.create(name);
 
     setArtists((currentArtists) => [...currentArtists, createdArtist]);
-    setSelectedArtistIds((currentIds) => [
-      ...currentIds,
-      String(createdArtist.id),
-    ]);
-    setNewArtistName('');
+
+    return createdArtist;
   }
 
   function handleSave() {
@@ -94,14 +69,6 @@ function MovieEditModal({ movie, onClose, onSave }) {
       setErrorMessage(t('movieEditModal.errors.pathRequired'));
       return;
     }
-
-    const selectedTags = tags.filter((tag) =>
-      selectedTagIds.includes(String(tag.id))
-    );
-
-    const selectedArtists = artists.filter((artist) =>
-      selectedArtistIds.includes(String(artist.id))
-    );
 
     onSave(movie.id, {
       name: trimmedName,
@@ -183,69 +150,25 @@ function MovieEditModal({ movie, onClose, onSave }) {
           </div>
 
           <section className="edit-options-section">
-            <h3>{t('movieEditModal.fields.tags')}</h3>
-
-            <div className="option-chip-list">
-              {tags.map((tag) => {
-                const id = String(tag.id);
-                const isSelected = selectedTagIds.includes(id);
-
-                return (
-                  <button
-                    key={tag.id}
-                    className={`option-chip ${isSelected ? 'selected' : ''}`}
-                    onClick={() => toggleSelectedId(id, setSelectedTagIds)}
-                  >
-                    {tag.name}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="inline-create-row">
-              <input
-                value={newTagName}
-                onChange={(event) => setNewTagName(event.target.value)}
-                placeholder={t('movieEditModal.placeholders.newTag')}
-              />
-
-              <button className="secondary-button" onClick={handleCreateTag}>
-                {t('common.add')}
-              </button>
-            </div>
+            <SearchableChipInput
+              label={t('movieEditModal.fields.tags')}
+              placeholder={t('movieEditModal.placeholders.newTag')}
+              options={tags}
+              selectedItems={selectedTags}
+              onChange={setSelectedTags}
+              onCreate={handleCreateTag}
+            />
           </section>
 
           <section className="edit-options-section">
-            <h3>{t('movieEditModal.fields.artists')}</h3>
-
-            <div className="option-chip-list">
-              {artists.map((artist) => {
-                const id = String(artist.id);
-                const isSelected = selectedArtistIds.includes(id);
-
-                return (
-                  <button
-                    key={artist.id}
-                    className={`option-chip ${isSelected ? 'selected' : ''}`}
-                    onClick={() => toggleSelectedId(id, setSelectedArtistIds)}
-                  >
-                    {artist.name}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="inline-create-row">
-              <input
-                value={newArtistName}
-                onChange={(event) => setNewArtistName(event.target.value)}
-                placeholder={t('movieEditModal.placeholders.newArtist')}
-              />
-
-              <button className="secondary-button" onClick={handleCreateArtist}>
-                {t('common.add')}
-              </button>
-            </div>
+            <SearchableChipInput
+              label={t('movieEditModal.fields.artists')}
+              placeholder={t('movieEditModal.placeholders.newArtist')}
+              options={artists}
+              selectedItems={selectedArtists}
+              onChange={setSelectedArtists}
+              onCreate={handleCreateArtist}
+            />
           </section>
 
           {errorMessage && <p className="modal-error">{errorMessage}</p>}

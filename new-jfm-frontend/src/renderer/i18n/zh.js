@@ -130,6 +130,28 @@ export const zh = {
     },
   },
 
+  movieFilter: {
+    title: '筛选',
+    expand: '展开筛选',
+    collapse: '收起筛选',
+    name: '名称',
+    namePlaceholder: '关键词',
+    like: '喜欢',
+    likeAll: '全部',
+    tags: '标签',
+    artists: '演员',
+    tagPlaceholder: '搜索标签',
+    artistPlaceholder: '搜索演员',
+    tagMode: '标签模式',
+    artistMode: '演员模式',
+    modeAll: '全部匹配',
+    modeAny: '任意匹配',
+    minFreshVal: '最低新鲜度',
+    maxFreshVal: '最高新鲜度',
+    apply: '应用筛选',
+    clear: '清空筛选',
+  },
+
   movieEditModal: {
     title: '编辑电影',
 

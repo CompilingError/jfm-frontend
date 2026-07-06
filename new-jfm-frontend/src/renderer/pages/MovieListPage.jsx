@@ -1,11 +1,23 @@
 import { useEffect, useState } from 'react';
 import { movieApi } from '../api/movieApi.js';
 import MovieCard from '../components/movie/MovieCard.jsx';
+import MovieEditModal from '../components/movie/MovieEditModal.jsx';
+import MovieFilterBar from '../components/movie/MovieFilterBar.jsx';
 import { t } from '../i18n/index.js';
 import './MovieListPage.css';
-import MovieEditModal from '../components/movie/MovieEditModal.jsx';
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 20;
+
+const DEFAULT_FILTERS = {
+  name: undefined,
+  tagIds: [],
+  tagMode: 'ALL',
+  artistIds: [],
+  artistMode: 'ANY',
+  like: undefined,
+  minFreshVal: undefined,
+  maxFreshVal: undefined,
+};
 
 function normalizeMoviePage(response) {
   if (!response) {
@@ -14,8 +26,6 @@ function normalizeMoviePage(response) {
       pageNumber: 0,
       totalPages: 0,
       totalElements: 0,
-      isFirst: true,
-      isLast: true,
     };
   }
 
@@ -24,28 +34,30 @@ function normalizeMoviePage(response) {
     pageNumber: response.number ?? 0,
     totalPages: response.totalPages ?? 0,
     totalElements: response.totalElements ?? 0,
-    isFirst: response.first ?? true,
-    isLast: response.last ?? true,
   };
 }
 
 function MovieListPage() {
   const [movies, setMovies] = useState([]);
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);
+
   const [pageNumber, setPageNumber] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
+
   const [expandedMovieId, setExpandedMovieId] = useState(null);
   const [editingMovie, setEditingMovie] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  async function loadMovies(nextPageNumber = pageNumber) {
+  async function loadMovies(nextPageNumber = pageNumber, nextFilters = filters) {
     setIsLoading(true);
     setErrorMessage('');
 
     try {
-      const response = await movieApi.list({
+      const response = await movieApi.search({
+        ...nextFilters,
         page: nextPageNumber,
         size: PAGE_SIZE,
       });
@@ -63,8 +75,25 @@ function MovieListPage() {
     }
   }
 
-  function handleRefresh() {
-    loadMovies(pageNumber);
+  function handlePageClick() {
+    setExpandedMovieId(null);
+  }
+
+  function handleRefresh(event) {
+    event.stopPropagation();
+    loadMovies(pageNumber, filters);
+  }
+
+  function handleApplyFilters(nextFilters) {
+    setFilters(nextFilters);
+    setExpandedMovieId(null);
+    loadMovies(0, nextFilters);
+  }
+
+  function handleClearFilters() {
+    setFilters(DEFAULT_FILTERS);
+    setExpandedMovieId(null);
+    loadMovies(0, DEFAULT_FILTERS);
   }
 
   function handleToggleMovie(movieId) {
@@ -97,6 +126,36 @@ function MovieListPage() {
       setEditingMovie(null);
     } catch {
       setErrorMessage(t('pages.movies.updateFailed'));
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function handleDeleteMovie(movie) {
+    const shouldDelete = window.confirm(
+      t('pages.movies.deleteConfirm', {
+        name: movie.name,
+      })
+    );
+
+    if (!shouldDelete) {
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMessage('');
+
+    try {
+      await movieApi.deleteByIds([movie.id]);
+
+      setMovies((currentMovies) =>
+        currentMovies.filter((currentMovie) => currentMovie.id !== movie.id)
+      );
+
+      setExpandedMovieId(null);
+    } catch (error) {
+      console.error('[movie delete failed]', error);
+      setErrorMessage(t('pages.movies.deleteFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -136,44 +195,20 @@ function MovieListPage() {
     }
   }
 
-  async function handleDeleteMovie(movie) {
-    const shouldDelete = window.confirm(
-      t('pages.movies.deleteConfirm', {
-        name: movie.name,
-      })
-    );
+  function handlePreviousPage(event) {
+    event.stopPropagation();
 
-    if (!shouldDelete) {
-      return;
-    }
-
-    setIsLoading(true);
-    setErrorMessage('');
-
-    try {
-      await movieApi.deleteByIds([movie.id]);
-
-      setMovies((currentMovies) =>
-        currentMovies.filter((currentMovie) => currentMovie.id !== movie.id)
-      );
-
-      setExpandedMovieId(null);
-    } catch {
-      setErrorMessage(t('pages.movies.deleteFailed'));
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  function handlePreviousPage() {
     if (pageNumber <= 0) {
       return;
     }
 
-    loadMovies(pageNumber - 1);
+    setExpandedMovieId(null);
+    loadMovies(pageNumber - 1, filters);
   }
 
-  function handleNextPage() {
+  function handleNextPage(event) {
+    event.stopPropagation();
+
     if (totalPages === 0) {
       return;
     }
@@ -182,21 +217,19 @@ function MovieListPage() {
       return;
     }
 
-    loadMovies(pageNumber + 1);
+    setExpandedMovieId(null);
+    loadMovies(pageNumber + 1, filters);
   }
 
   useEffect(() => {
-    loadMovies(0);
+    loadMovies(0, DEFAULT_FILTERS);
   }, []);
 
   const isFirstPage = pageNumber <= 0;
   const isLastPage = totalPages === 0 || pageNumber >= totalPages - 1;
 
   return (
-    <div
-      className="movie-list-page"
-      onClick={() => setExpandedMovieId(null)}
-    >
+    <div className="movie-list-page" onClick={handlePageClick}>
       <header className="movie-list-header">
         <div>
           <h1>{t('pages.movies.title')}</h1>
@@ -211,6 +244,12 @@ function MovieListPage() {
           {isLoading ? t('pages.movies.loading') : t('pages.movies.refresh')}
         </button>
       </header>
+
+      <MovieFilterBar
+        isLoading={isLoading}
+        onApply={handleApplyFilters}
+        onClear={handleClearFilters}
+      />
 
       <section className="movie-list-summary">
         <span>
@@ -247,7 +286,10 @@ function MovieListPage() {
         </div>
       )}
 
-      <footer className="movie-list-pagination">
+      <footer
+        className="movie-list-pagination"
+        onClick={(event) => event.stopPropagation()}
+      >
         <button
           className="secondary-button"
           onClick={handlePreviousPage}
