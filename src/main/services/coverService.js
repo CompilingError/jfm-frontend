@@ -5,6 +5,7 @@ import fsSync from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
+import { getConfigFolderPath } from './settingsStore.js';
 
 const require = createRequire(import.meta.url);
 
@@ -24,11 +25,7 @@ let coverQueue = Promise.resolve();
 let resolvedFfmpegPath = undefined;
 
 function getCoverDirectory() {
-  const baseDirectory = app.isPackaged
-    ? path.dirname(app.getPath('exe'))
-    : process.cwd();
-
-  return path.join(baseDirectory, 'user-config', 'covers');
+  return path.join(getConfigFolderPath(), 'covers');
 }
 
 function getBundledResourcesFolderPath() {
