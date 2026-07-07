@@ -82,10 +82,32 @@ export const zh = {
 
     tags: {
       title: '标签管理',
+      description: '管理电影标签。左键编辑，右键搜索关联电影。',
+      createPlaceholder: '输入新标签名称',
+      empty: '暂无标签。',
+      loadFailed: '加载标签失败。',
+      emptyName: '标签名称不能为空。',
+      createSuccess: '标签已创建：{{name}}。',
+      createFailed: '创建标签失败。',
+      updateSuccess: '标签已更新：{{name}}。',
+      updateFailed: '更新标签失败。',
+      editTitle: '编辑标签：{{name}}',
+      searchRelatedMovies: '搜索关联电影',
     },
 
     artists: {
       title: '演员管理',
+      description: '管理演员信息。左键编辑，右键搜索关联电影。',
+      createPlaceholder: '输入新演员名称',
+      empty: '暂无演员。',
+      loadFailed: '加载演员失败。',
+      emptyName: '演员名称不能为空。',
+      createSuccess: '演员已创建：{{name}}。',
+      createFailed: '创建演员失败。',
+      updateSuccess: '演员已更新：{{name}}。',
+      updateFailed: '更新演员失败。',
+      editTitle: '编辑演员：{{name}}',
+      searchRelatedMovies: '搜索关联电影',
     },
   },
 

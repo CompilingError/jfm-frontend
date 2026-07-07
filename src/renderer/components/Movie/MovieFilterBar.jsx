@@ -40,7 +40,7 @@ function normalizeFilters(localFilters, selectedTags, selectedArtists) {
   };
 }
 
-function MovieFilterBar({ isLoading, onApply, onClear }) {
+function MovieFilterBar({ isLoading, filterSeed, onApply, onClear }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const [tags, setTags] = useState([]);
@@ -105,6 +105,15 @@ function MovieFilterBar({ isLoading, onApply, onClear }) {
   useEffect(() => {
     loadOptions();
   }, []);
+
+  useEffect(() => {
+    if (!filterSeed) {
+      return;
+    }
+
+    setSelectedTags(filterSeed.selectedTags ?? []);
+    setSelectedArtists(filterSeed.selectedArtists ?? []);
+  }, [filterSeed]);
 
   return (
     <CollapsibleFilterPanel

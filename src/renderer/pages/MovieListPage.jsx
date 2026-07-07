@@ -6,6 +6,7 @@ import MovieFilterBar from '../components/movie/MovieFilterBar.jsx';
 import { t } from '../i18n/index.js';
 import './MovieListPage.css';
 import { useToast } from '../components/common/toast/ToastProvider.jsx';
+import { useSearchParams } from 'react-router';
 
 const PAGE_SIZE = 20;
 
@@ -39,6 +40,49 @@ function normalizeMoviePage(response) {
   };
 }
 
+function buildFiltersFromSearchParams(searchParams) {
+  const tagId = searchParams.get('tagId');
+  const tagName = searchParams.get('tagName');
+  const artistId = searchParams.get('artistId');
+  const artistName = searchParams.get('artistName');
+
+  const nextFilters = {
+    ...DEFAULT_FILTERS,
+  };
+
+  const filterSeed = {
+    selectedTags: [],
+    selectedArtists: [],
+  };
+
+  if (tagId && tagName) {
+    const tag = {
+      id: Number(tagId),
+      name: tagName,
+    };
+
+    nextFilters.tagIds = [tag.id];
+    nextFilters.tagMode = 'ALL';
+    filterSeed.selectedTags = [tag];
+  }
+
+  if (artistId && artistName) {
+    const artist = {
+      id: Number(artistId),
+      name: artistName,
+    };
+
+    nextFilters.artistIds = [artist.id];
+    nextFilters.artistMode = 'ANY';
+    filterSeed.selectedArtists = [artist];
+  }
+
+  return {
+    filters: nextFilters,
+    filterSeed,
+  };
+}
+
 function MovieListPage() {
   const [movies, setMovies] = useState([]);
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
@@ -52,6 +96,9 @@ function MovieListPage() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const [searchParams] = useSearchParams();
+  const [filterSeed, setFilterSeed] = useState(null);
 
   const toast = useToast();
 
@@ -267,8 +314,22 @@ function MovieListPage() {
   }
 
   useEffect(() => {
+    const hasInjectedFilter =
+      searchParams.has('tagId') || searchParams.has('artistId');
+
+    if (hasInjectedFilter) {
+      const result = buildFiltersFromSearchParams(searchParams);
+
+      setFilters(result.filters);
+      setFilterSeed(result.filterSeed);
+      loadMovies(0, result.filters);
+      return;
+    }
+
+    setFilterSeed(null);
+    setFilters(DEFAULT_FILTERS);
     loadMovies(0, DEFAULT_FILTERS);
-  }, []);
+  }, [searchParams]);
 
   const isFirstPage = pageNumber <= 0;
   const isLastPage = totalPages === 0 || pageNumber >= totalPages - 1;
@@ -292,6 +353,7 @@ function MovieListPage() {
 
       <MovieFilterBar
         isLoading={isLoading}
+        filterSeed={filterSeed}
         onApply={handleApplyFilters}
         onClear={handleClearFilters}
       />

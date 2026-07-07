@@ -1,0 +1,165 @@
+.entity-chip-page {
+  position: relative;
+}
+
+.entity-chip-header {
+  margin-bottom: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.entity-chip-header h1 {
+  margin: 0 0 6px;
+  color: #111827;
+}
+
+.entity-chip-header p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.entity-chip-create-card {
+  margin-bottom: 18px;
+  padding: 14px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  display: flex;
+  gap: 10px;
+}
+
+.entity-chip-create-card input {
+  flex: 1;
+
+  height: 38px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  padding: 8px 10px;
+
+  color: #111827;
+  font-size: 14px;
+}
+
+.entity-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.entity-chip {
+  border: 1px solid #c7d2fe;
+  border-radius: 999px;
+
+  padding: 8px 13px;
+
+  background: #eef2ff;
+  color: #3730a3;
+
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.entity-chip:hover {
+  background: #c7d2fe;
+}
+
+.entity-chip-empty {
+  padding: 40px;
+
+  background: #ffffff;
+  border: 1px dashed #d1d5db;
+  border-radius: 14px;
+
+  color: #6b7280;
+  text-align: center;
+}
+
+.entity-edit-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+
+  background: rgb(15 23 42 / 35%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.entity-edit-modal {
+  width: min(420px, calc(100vw - 32px));
+
+  padding: 20px;
+
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgb(15 23 42 / 25%);
+}
+
+.entity-edit-modal h2 {
+  margin: 0 0 14px;
+  color: #111827;
+  font-size: 18px;
+}
+
+.entity-edit-modal input {
+  width: 100%;
+  height: 40px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  padding: 8px 10px;
+
+  color: #111827;
+  font-size: 14px;
+}
+
+.entity-edit-actions {
+  margin-top: 16px;
+
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.entity-context-menu {
+  position: fixed;
+  z-index: 3000;
+
+  min-width: 160px;
+
+  padding: 6px;
+
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+
+  box-shadow: 0 14px 34px rgb(15 23 42 / 18%);
+}
+
+.entity-context-menu button {
+  width: 100%;
+
+  border: none;
+  border-radius: 8px;
+
+  padding: 9px 10px;
+
+  background: transparent;
+  color: #111827;
+
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.entity-context-menu button:hover {
+  background: #f3f4f6;
+}
