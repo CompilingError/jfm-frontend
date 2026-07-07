@@ -11,12 +11,23 @@ const DEFAULT_CONFIG = {
   pendingReviewOnNewFile: true,
 };
 
+function getPackagedInstallRootPath() {
+  const exeFolderPath = path.dirname(app.getPath('exe'));
+  const exeFolderName = path.basename(exeFolderPath).toLowerCase();
+
+  if (/^app-\d/.test(exeFolderName)) {
+    return path.dirname(exeFolderPath);
+  }
+
+  return exeFolderPath;
+}
+
 export function getConfigFolderPath() {
   if (!app.isPackaged) {
     return path.join(process.cwd(), CONFIG_FOLDER_NAME);
   }
 
-  return path.join(path.dirname(app.getPath('exe')), CONFIG_FOLDER_NAME);
+  return path.join(getPackagedInstallRootPath(), CONFIG_FOLDER_NAME);
 }
 
 function getConfigFilePath() {
