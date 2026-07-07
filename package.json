@@ -1,14 +1,17 @@
 {
-  "name": "new-jfm-frontend",
-  "productName": "new-jfm-frontend",
+  "name": "jfm-frontend",
+  "productName": "JFM",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "JFM desktop application",
   "main": ".vite/build/main.js",
   "private": true,
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
+    "make:win": "electron-forge make --platform=win32 --arch=x64",
+    "prepare:release": "node scripts/prepare-release-v1.mjs",
+    "release:v1": "npm run prepare:release && npm run make:win",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
