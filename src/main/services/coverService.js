@@ -1,12 +1,12 @@
 import { app } from 'electron';
 import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
+import fsSync from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const ffmpegPath = require('ffmpeg-static');
 
 const VIDEO_EXTENSIONS = new Set([
   '.mp4',
@@ -21,6 +21,7 @@ const VIDEO_EXTENSIONS = new Set([
 const runningTasks = new Map();
 
 let coverQueue = Promise.resolve();
+let resolvedFfmpegPath = undefined;
 
 function getCoverDirectory() {
   const baseDirectory = app.isPackaged
@@ -28,6 +29,54 @@ function getCoverDirectory() {
     : process.cwd();
 
   return path.join(baseDirectory, 'user-config', 'covers');
+}
+
+function getBundledResourcesFolderPath() {
+  if (!app.isPackaged) {
+    return path.join(process.cwd(), 'resources');
+  }
+
+  return path.join(process.resourcesPath, 'resources');
+}
+
+function getBundledFfmpegPath() {
+  const executableName = process.platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg';
+
+  return path.join(
+    getBundledResourcesFolderPath(),
+    'runtime',
+    'bin',
+    executableName
+  );
+}
+
+function getFfmpegPath() {
+  if (resolvedFfmpegPath !== undefined) {
+    return resolvedFfmpegPath;
+  }
+
+  const bundledFfmpegPath = getBundledFfmpegPath();
+
+  if (fsSync.existsSync(bundledFfmpegPath)) {
+    resolvedFfmpegPath = bundledFfmpegPath;
+    return resolvedFfmpegPath;
+  }
+
+  if (!app.isPackaged) {
+    try {
+      const ffmpegStaticPath = require('ffmpeg-static');
+
+      if (ffmpegStaticPath && fsSync.existsSync(ffmpegStaticPath)) {
+        resolvedFfmpegPath = ffmpegStaticPath;
+        return resolvedFfmpegPath;
+      }
+    } catch {
+      // Development fallback is optional. Missing ffmpeg should not crash Electron.
+    }
+  }
+
+  resolvedFfmpegPath = null;
+  return resolvedFfmpegPath;
 }
 
 async function ensureDirectory(directoryPath) {
@@ -81,8 +130,10 @@ async function readImageAsDataUrl(imagePath) {
 
 function runFfmpeg(inputPath, outputPath, seekTime) {
   return new Promise((resolve, reject) => {
+    const ffmpegPath = getFfmpegPath();
+
     if (!ffmpegPath) {
-      reject(new Error('ffmpeg-static path is empty'));
+      reject(new Error('ffmpeg executable was not found'));
       return;
     }
 
