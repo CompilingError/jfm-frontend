@@ -11,7 +11,7 @@ const DEFAULT_CONFIG = {
   pendingReviewOnNewFile: true,
 };
 
-function getConfigFolderPath() {
+export function getConfigFolderPath() {
   if (!app.isPackaged) {
     return path.join(process.cwd(), CONFIG_FOLDER_NAME);
   }
