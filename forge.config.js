@@ -10,10 +10,17 @@ module.exports = {
   rebuildConfig: {},
   makers: [
     {
-      name: '@electron-forge/maker-squirrel',
+      name: '@electron-forge/maker-wix',
       config: {
         name: 'JFM',
-        setupExe: 'JFM-v1.0.0-Setup.exe',
+        manufacturer: 'CompilingError',
+        description: 'JFM desktop application',
+        exe: 'JFM.exe',
+        shortcutName: 'JFM',
+        appUserModelId: 'com.compilingerror.jfm',
+        ui: {
+          chooseDirectory: true,
+        },
       },
     },
     {
