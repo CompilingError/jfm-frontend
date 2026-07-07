@@ -1,16 +1,11 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, dialog } from 'electron';
 import path from 'node:path';
-import started from 'electron-squirrel-startup';
 import { registerSettingsHandlers } from './main/ipc/settingsHandlers.js';
 import { ensureSettingsConfig } from './main/services/settingsStore.js';
 import { registerReviewHandlers } from './main/ipc/reviewHandlers.js';
 import { registerFileHandlers } from './main/ipc/fileHandlers.js';
 import { registerCoverHandlers } from './main/ipc/coverHandlers.js';
-
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (started) {
-  app.quit();
-}
+import { startBackend, stopBackend } from './main/services/backendProcess.js';
 
 const createWindow = () => {
   // Create the browser window.
@@ -29,8 +24,9 @@ const createWindow = () => {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  if (!app.isPackaged) {
+    mainWindow.webContents.openDevTools();
+  }
 };
 
 // This method will be called when Electron has finished
@@ -39,11 +35,21 @@ const createWindow = () => {
 app.whenReady().then(async () => {
 
   await ensureSettingsConfig();
+
+  try {
+    await startBackend();
+  } catch (error) {
+    dialog.showErrorBox(
+      'JFM backend failed to start',
+      error instanceof Error ? error.message : String(error)
+    );
+  }
+
   registerSettingsHandlers();
   registerReviewHandlers();
   registerFileHandlers();
   registerCoverHandlers();
-  
+
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the
@@ -53,6 +59,10 @@ app.whenReady().then(async () => {
       createWindow();
     }
   });
+});
+
+app.on('before-quit', () => {
+  stopBackend();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

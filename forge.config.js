@@ -1,15 +1,27 @@
+const path = require('node:path');
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 
 module.exports = {
   packagerConfig: {
     asar: true,
+    extraResource: [path.resolve(__dirname, 'resources')],
   },
   rebuildConfig: {},
   makers: [
     {
-      name: '@electron-forge/maker-squirrel',
-      config: {},
+      name: '@electron-forge/maker-wix',
+      config: {
+        name: 'JFM',
+        manufacturer: 'CompilingError',
+        description: 'JFM desktop application',
+        exe: 'JFM.exe',
+        shortcutName: 'JFM',
+        appUserModelId: 'com.compilingerror.jfm',
+        ui: {
+          chooseDirectory: true,
+        },
+      },
     },
     {
       name: '@electron-forge/maker-zip',

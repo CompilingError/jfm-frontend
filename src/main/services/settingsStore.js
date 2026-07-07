@@ -11,12 +11,20 @@ const DEFAULT_CONFIG = {
   pendingReviewOnNewFile: true,
 };
 
-function getConfigFolderPath() {
+function getProgramDataPath() {
+  if (process.platform !== 'win32') {
+    return app.getPath('userData');
+  }
+
+  return process.env.PROGRAMDATA || 'C:\\ProgramData';
+}
+
+export function getConfigFolderPath() {
   if (!app.isPackaged) {
     return path.join(process.cwd(), CONFIG_FOLDER_NAME);
   }
 
-  return path.join(path.dirname(app.getPath('exe')), CONFIG_FOLDER_NAME);
+  return path.join(getProgramDataPath(), 'JFM', CONFIG_FOLDER_NAME);
 }
 
 function getConfigFilePath() {
