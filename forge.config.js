@@ -1,15 +1,20 @@
+const path = require('node:path');
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 
 module.exports = {
   packagerConfig: {
     asar: true,
+    extraResource: [path.resolve(__dirname, 'resources')],
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      config: {
+        name: 'JFM',
+        setupExe: 'JFM-v1.0.0-Setup.exe',
+      },
     },
     {
       name: '@electron-forge/maker-zip',
