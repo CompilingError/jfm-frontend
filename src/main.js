@@ -1,17 +1,11 @@
 import { app, BrowserWindow, dialog } from 'electron';
 import path from 'node:path';
-import started from 'electron-squirrel-startup';
 import { registerSettingsHandlers } from './main/ipc/settingsHandlers.js';
 import { ensureSettingsConfig } from './main/services/settingsStore.js';
 import { registerReviewHandlers } from './main/ipc/reviewHandlers.js';
 import { registerFileHandlers } from './main/ipc/fileHandlers.js';
 import { registerCoverHandlers } from './main/ipc/coverHandlers.js';
 import { startBackend, stopBackend } from './main/services/backendProcess.js';
-
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (started) {
-  app.quit();
-}
 
 const createWindow = () => {
   // Create the browser window.
